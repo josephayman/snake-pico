@@ -100,6 +100,10 @@ while True:
 
     # Check if snake is outside the screen
     if snake_x < 0 or snake_x > WIDTH or snake_y < 0 or snake_y > HEIGHT:
+        lcd.fill(BLACK)
+        lcd.text('GAME OVER', 50, 120, RED)
+        lcd.show()
+        break
 
 
     # Check if snake has eaten the food
