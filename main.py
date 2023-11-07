@@ -1,6 +1,8 @@
 from machine import Pin
 from util import LCD, color_rgb
-
+import random
+import utime
+    
 
 # 1
 # Set up button pins.
@@ -67,8 +69,6 @@ while True:
 
     # Display a nice banner.
     lcd.text('JOSALA @ KANTEGA', 60, 60, BLUE)
-    # TODO 0:
-    # Change the banner so it includes your name!
 
 
     # Draw the snake
@@ -100,16 +100,31 @@ while True:
 
     # Check if snake is outside the screen
     if snake_x < 0 or snake_x > WIDTH or snake_y < 0 or snake_y > HEIGHT:
-        # TODO 1:
-        # Add a game over message
-        pass
+
 
     # Check if snake has eaten the food
     if snake_x == food[0] and snake_y == food[1]:
-        # TODO 2:
-        # Add a new food
-        # Make the snake longer
-        pass
+        # Extend the snake
+        snake.insert(0, (snake_x, snake_y))
+        
+        # Generate new food location
+        while True:
+            new_food = (random.randint(0, WIDTH-1), random.randint(0, HEIGHT-1))
+            if new_food not in snake:
+                food = new_food
+                break
+    
+    else:
+        # Move the snake
+        snake.insert(0, (snake_x, snake_y))
+        snake.pop()
+    
+    # Check for collisions with itself
+    if (snake_x, snake_y) in snake[1:]:
+        lcd.fill(BLACK)
+        lcd.text('GAME OVER', 50, 120, RED)
+        lcd.show()
+        break
     
 
     #
@@ -118,3 +133,5 @@ while True:
 
     # Render everything to screen...
     lcd.show()
+    # Delay to control game speed
+    utime.sleep_ms(100)
